@@ -1,69 +1,72 @@
+/**
+ * @file tictac_turnin.cc
+ * 
+ * @author Pedram Safaei
+ * 
+ * @version 1.2
+ * 
+ * @date 9/27/2018
+ * 
+ * @bug None that would break the grading system!
+ * */
+
 #include <tictac_support.h>
 #include <stdio.h>
 #include <iostream>
-#include <limits> // needed to set score to infinity (not really infinity but you know)
 
 struct move{
-	int y=0;
-	int x=0;
+	int Row=0;
+	int Col=0;
 };
 
-int level = 0; // so it can pick the win instead of going for a save I had to add tree levels to it
-
-move MiniMaxAlg(int board[][3], int Computer, int NotComputer);
-int SearchForMax(int board[][3],int Computer, int NotComputer, int level);
-int SearchForMin(int board[][3], int Computer, int NotComputer, int level);
-bool HasWon(int board[][3], int state);
-bool HasTied(int board[][3]);
-
+int depth = 0; // so it can pick the win instead of going for a save I had to add tree depths to it
 
 /**
-	make_move: takes a board state and makes a legal 
-	(hopefully optimal) move
+ * @brief The minimax algorithm, which is the main goal of this assignment, it will try to find the best move
+ * @param board, which is the board we are working with
+ * @param computer, which is the player who's turn it is
+ * @param notcomputer, is kinda our human, the person we are going against 
+ * @return it will return the row and the column of the best move 
+ * */
+move MiniMaxAlg(int board[][3], int Computer, int NotComputer);
+/**
+ * @brief that's to make the minimax alg cleaner, made a separate function for searching for max
+ * @param board, which is the board we are working with
+ * @param computer, which is the player who's turn it is
+ * @param notcomputer, is kinda our human, the person we are going against 
+ * @param depth, so it can pick the win instead of going for a save I had to add tree depths to it
+ * @return will return the best score
+ * */
+int SearchForMax(int board[][3],int Computer, int NotComputer, int depth);
+/**
+ * @brief that's to make the minimax alg cleaner, made a separate function for searching for min
+ * @param board, which is the board we are working with
+ * @param computer, which is the player who's turn it is
+ * @param notcomputer, is kinda our human, the person we are going against 
+ * @param depth, so it can pick the win instead of going for a save I had to add tree depths to it
+ * @return will return the best score 
+ * */
+int SearchForMin(int board[][3], int Computer, int NotComputer, int depth);
+/**
+ * @brief check to see if we have a winning pattern
+ * @param board, which is the board we are working with
+ * @param state, check to see if the human is winning or the computer 
+ * @return return true or false depending on if there is a winning pattern 
+ * */
+bool HasWon(int board[][3], int state);
+/**
+ * @brief check to see if we have tied at the end
+ * @param board, which is the board we are working with
+ * @return true or false, if there's a tie and there's no winning pattern then it is a tie
+ * */
+bool HasTied(int board[][3]);
+/**
+ * @brief we don't need this but it feels right to have something like this, check to see if the board is full if it is do not do anything
+ * @param board, which is the board we are working with
+ * @return true or false depending on if the board is full or not
+ * */
+bool BoardIsFull(int board[][3]);
 
-	args:
-		int [][3] board: 3x3 array of ints representing the 
-		board state. The values of board are altered based
-		on the move
-			0: empty
-			1: x
-		 -1: o
-		
-	returns (int):
-		the number of steps it took to choose the best move
-		(current implementation returns 1 by default, 0 if no move made)
-**/
-
-/*
- int MiniMaxAlg(depth, state){
-     if (gameover || depth == 0)
-        return score;
-    
-    //compute all legal moves for this state (player)
-
-    Children = legalmoves(state);
-
-    if (state == -1) //maximize
-	bestscore = -infinity;
-
-	for each child 
-	{
-		score = MiniMaxAlg(depth -1, 1);
-		if(Score > bestscore)
-			bestscore = score;
-		return bestscore;
-	}
-	else if (state == 1) //minimize
-	bestscore = +inf;
-	for each child {
-		score = MiniMaxAlg(depth -1; -1)
-		if (score < bestscore)
-			bestscore = score;
-		return bestscore;
-	}
-
- }
- */
 
 int make_move( int board[][3] )
 {
@@ -81,42 +84,29 @@ int make_move( int board[][3] )
 	int Computer = state;
 	int NotComputer = -state;
 
-	//std::cout << "Computer (AI)" << Computer << std::endl;
-	//std::cout << "NotComputer " << NotComputer << std::endl;
-   /*
-	// default behavior: find any unoccupied square and make the move
-	for( int i = 0; i < 3; i++ )
-		for( int j = 0; j < 3; j++ )
-			// find an empty square
-			if( board[i][j] == 0 )
-			{
-				// that's the move
-				printf( "player [%d] made move: [%d,%d]\n", state, i, j );
-				board[i][j] = state;
-				return 1;
-			}
-	
-	// no move was made (board was full)
-	return 0;
-	*/
+	if (BoardIsFull(board)){
+		std::cout << "Board is Full so NO!" << std::endl;
+	}
+	else {
 	move ChosenMove;
 	ChosenMove = MiniMaxAlg(board, Computer, NotComputer);
-	printf( "player [%d] made move: [%d,%d]\n", Computer, ChosenMove.x, ChosenMove.y );
-	board[ChosenMove.x][ChosenMove.y] = Computer;
+	printf( "player [%d] made move: [%d,%d]\n", Computer, ChosenMove.Col, ChosenMove.Row );
+	board[ChosenMove.Col][ChosenMove.Row] = Computer;
+	}
 	return 0;
 }
 move MiniMaxAlg(int board[][3], int Computer, int NotComputer){
-	int score = std::numeric_limits<int>::max();
+	int score = 100000;
 	move MOVE;
 	for (int i=0; i<3; i++){
 		for (int j=0; j<3; j++){
 			if (board[i][j] == 0){
 				board[i][j] = Computer; 
-				int temp = SearchForMax(board, Computer, NotComputer, level);
+				int temp = SearchForMax(board, Computer, NotComputer, depth);
 				if(temp < score){
 					score = temp;
-					MOVE.x = i;
-					MOVE.y = j;
+					MOVE.Col = i;
+					MOVE.Row = j;
 				}
 				board[i][j] = 0;
 			}
@@ -125,7 +115,7 @@ move MiniMaxAlg(int board[][3], int Computer, int NotComputer){
 	return MOVE;
 }
 
-int SearchForMax(int board[][3], int Computer, int NotComputer, int level){
+int SearchForMax(int board[][3], int Computer, int NotComputer, int depth){
 	if (HasWon(board, NotComputer)){
 		return 10;
 	}
@@ -135,19 +125,19 @@ int SearchForMax(int board[][3], int Computer, int NotComputer, int level){
 	else if (HasTied(board)){
 		return 0;
 	}
-	int score = std::numeric_limits<int>::min();
+	int score = -100000;
 	for (int i=0; i<3; i++){
 		for (int j=0; j<3; j++){
 			if (board[i][j] == 0){
 				board[i][j] = NotComputer;
-				score = std::max(score, SearchForMin(board, Computer, NotComputer, level+1)-level);
+				score = std::max(score, SearchForMin(board, Computer, NotComputer, depth+1)-depth);
 				board[i][j] = 0;
 			}
 		}
 	}
 	return score;
 }
-int SearchForMin(int board[][3],int Computer, int NotComputer, int level){
+int SearchForMin(int board[][3],int Computer, int NotComputer, int depth){
 	if (HasWon(board,NotComputer)){
 		return 10;
 	}
@@ -157,12 +147,12 @@ int SearchForMin(int board[][3],int Computer, int NotComputer, int level){
 	else if (HasWon(board,Computer)){
 		return -10;
 	}
-	int score = std::numeric_limits<int>::max();
+	int score = 100000;
 	for (int i=0; i<3; i++){
 		for (int j=0; j<3; j++){
 			if (board[i][j] == 0){
 				board[i][j] = Computer;
-				score = std::min(score, SearchForMax(board, Computer, NotComputer, level+1)+level);
+				score = std::min(score, SearchForMax(board, Computer, NotComputer, depth+1)+depth);
 				board[i][j] = 0;
 			}
 		}
@@ -202,6 +192,17 @@ bool HasTied(int board[][3]){
 		   board[i][2] == 0){
 			   return false;
 		   }
+	}
+	return true;
+}
+
+bool BoardIsFull(int board[][3]){
+	for (int i=0; i<3; i++){
+		for (int j=0; j<3; j++){
+			if (board[i][j] == 0){
+				return false;
+			}
+		}
 	}
 	return true;
 }
