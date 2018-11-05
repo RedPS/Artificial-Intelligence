@@ -1,0 +1,28 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/ps/Desktop/AI/projects/project1/Proj1/Spam/src/training.cc
+fstream
+-
+iostream
+-
+string
+-
+unordered_map
+-
+vector
+-
+algorithm
+-
+cmath
+-
+sstream
+-
+iterator
+-
+
