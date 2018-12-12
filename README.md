@@ -33,6 +33,16 @@ Kalman Filter, Hopper the hallway Robot
 sudo chmod +x sim.py
 ./sim.py
 ```
+# project 3
+Q learning and Reinforcement Learning
+
+## to run
+```
+sudo chmod +x cart.py
+sudo chmod +x car.py
+./cart.py
+./car.py
+```
 
 
 
