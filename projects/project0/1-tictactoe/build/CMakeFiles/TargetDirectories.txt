@@ -1,3 +1,0 @@
-/home/ps/Desktop/AI/projects/project0/1-tictactoe/build/CMakeFiles/rebuild_cache.dir
-/home/ps/Desktop/AI/projects/project0/1-tictactoe/build/CMakeFiles/tictactoe.dir
-/home/ps/Desktop/AI/projects/project0/1-tictactoe/build/CMakeFiles/edit_cache.dir
