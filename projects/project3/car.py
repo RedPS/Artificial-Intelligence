@@ -7,12 +7,15 @@ I do not know how to reproduce it and it only happens once or twice
 after testing it for more than 10 times
 '''
 #!/usr/bin/python
+
 import argparse
 import logging
 import sys
 import numpy as np
 import gym
+
 #import gym.scoreboard.scoring
+
 from gym import wrappers, logger
 ################################################
 # CS482: this is the function that changes the
@@ -130,9 +133,7 @@ if __name__ == '__main__':
         # reflect the success/failure of the mountain
         # car task
         ############################################
-        #print state[0]
-        #print s 
-        #print x
+        
         print ("Episode: ", episode)
         if state[0] < 0.5:
             print ("NO NO NO (Fail!) | state: ", state[0] )
