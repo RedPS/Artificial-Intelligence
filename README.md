@@ -20,8 +20,7 @@ Naive Bayes spam filtering
 ## to compile
 
 ```
-cd build
-makefile
+Use CMake
 ```
 # project2
 
