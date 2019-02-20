@@ -7,6 +7,7 @@ Create a tic-tac-toe move-maker program. I've given you some skeleton file I/O c
 
 ## to compile
 
+Using CMake
 ```
 mkdir build && cd build
 cmake ..
@@ -19,8 +20,11 @@ Naive Bayes spam filtering
 
 ## to compile
 
+using CMake
 ```
-Use CMake
+mkdir build && cd build
+cmake ..
+make
 ```
 # project2
 
